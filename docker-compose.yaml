@@ -1,0 +1,53 @@
+---
+services:
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: backend
+    restart: always
+    env_file:
+      - .env
+    expose:
+      - "${BACKEND_PORT}"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "wget -qO- http://localhost:${BACKEND_CONTAINER_PORT}/health || exit 1",
+        ]
+      interval: 20s
+      timeout: 3s
+      retries: 5
+    networks:
+      - web
+    logging:
+      driver: json-file
+      options:
+        max-size: "${LOG_MAX_SIZE}"
+        max-file: "${LOG_MAX_FILE}"
+  nginx:
+    container_name: nginx
+    restart: always
+    depends_on:
+      - backend
+    env_file:
+      - .env
+    ports:
+      - "${NGINX_PORT}:80"
+    volumes:
+      - ${FRONTEND_DIST}:/usr/share/nginx/html:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    networks:
+      - web
+    logging:
+      driver: json-file
+      options:
+        max-size: "${LOG_MAX_SIZE}"
+        max-file: "${LOG_MAX_FILE}"
+
+networks:
+  web:
+    driver: bridge
