@@ -15,6 +15,12 @@ services:
       options:
         max-size: "${LOG_MAX_SIZE}"
         max-file: "${LOG_MAX_FILE}"
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8000/api/v1/health || exit 1" ]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s
   nginx:
     container_name: nginx
     restart: always
