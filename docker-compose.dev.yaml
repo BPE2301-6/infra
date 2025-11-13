@@ -1,0 +1,30 @@
+services:
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    container_name: backend-dev
+    restart: unless-stopped
+    ports:
+      - "${BACKEND_PORT}:8000"
+    networks:
+      - dev
+      - monitoring
+    env_file: .env.dev
+    logging:
+      driver: json-file
+      options:
+        max-size: "${LOG_MAX_SIZE}"
+        max-file: "${LOG_MAX_FILE}"
+    healthcheck:
+      test: [ "CMD-SHELL", "python3 -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')\"" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+networks:
+  dev:
+    driver: bridge
+  monitoring:
+    driver: bridge
