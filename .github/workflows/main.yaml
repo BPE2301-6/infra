@@ -1,0 +1,27 @@
+name: Deploy Infra to Prod (stub)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  noop:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Stub
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          format: markdown
+          message: |
+            ⚙️ **INFRA prod пайплайн (заглушка)**
+            Реальный деплой пока не настроен.
+            Репозиторий: `${{ github.repository }}`
+            Ветка: `${{ github.ref }}`
+            🔗 [Workflow](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
