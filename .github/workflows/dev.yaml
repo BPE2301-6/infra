@@ -31,7 +31,6 @@ jobs:
             📈 **Деплой monitoring на dev**
             Репозиторий: `${{ github.repository }}`
             Ветка: `${{ github.ref }}`
-            📁 INFRA_DIR: `${{ secrets.DEV_INFRA_DIR }}`
 
       - name: Install SSH key
         run: |
@@ -76,7 +75,6 @@ jobs:
             ✅ **Monitoring dev обновлен**
             Репозиторий: `${{ github.repository }}`
             Ветка: `${{ github.ref }}`
-            📁 INFRA_DIR: `${{ secrets.DEV_INFRA_DIR }}`
 
       - name: Notify Failure
         if: failure()
@@ -90,7 +88,6 @@ jobs:
             Репозиторий: `${{ github.repository }}`
             Ветка: `${{ github.ref }}`
             🔗 [Workflow](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
-            📁 INFRA_DIR: `${{ secrets.DEV_INFRA_DIR }}`
 
       - name: Cleanup
         run: rm -rf ~/.ssh
